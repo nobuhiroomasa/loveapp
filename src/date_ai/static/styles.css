@@ -1,0 +1,182 @@
+:root {
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  color: #1f2933;
+  background-color: #f7fafc;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header,
+footer {
+  background: linear-gradient(120deg, #ff8ba7, #ffc6c7);
+  color: #fff;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+header .lead {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+main {
+  flex: 1;
+  padding: 2rem 1.5rem 4rem;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+section + section {
+  margin-top: 2.5rem;
+}
+
+.search form {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 12px 32px rgba(255, 139, 167, 0.15);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+select,
+input,
+button {
+  font: inherit;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background-color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+select:focus,
+input:focus {
+  border-color: #ff8ba7;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 139, 167, 0.25);
+}
+
+.actions {
+  text-align: right;
+  margin-top: 1rem;
+}
+
+button {
+  background: linear-gradient(120deg, #ff8ba7, #ff758f);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.required {
+  color: #ff4d6d;
+  margin-left: 0.25rem;
+}
+
+.message {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: #fff4f6;
+  border-left: 4px solid #ff8ba7;
+  border-radius: 10px;
+}
+
+.results h2 {
+  margin-bottom: 1rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.card .meta {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.card .description {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.highlights ul,
+.rationale ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.tags {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tags span {
+  background-color: #ffe5ec;
+  color: #b8325a;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+footer small {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+  header,
+  footer {
+    padding: 1.5rem 1rem;
+  }
+
+  main {
+    padding: 1.5rem 1rem 3rem;
+  }
+}
