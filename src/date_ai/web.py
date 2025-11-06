@@ -2,6 +2,16 @@
 
 from __future__ import annotations
 
+import importlib.util
+import argparse
+from dataclasses import asdict
+from typing import Any, Dict, List, Optional
+
+if importlib.util.find_spec("flask") is None:  # pragma: no cover - import guard
+    raise RuntimeError(
+        "Flask が見つかりません。`pip install -r requirements.txt` を実行して依存関係を"
+        "インストールしてください。"
+    )
 
 from flask import Flask, render_template, request
 
@@ -137,9 +147,31 @@ def _serialize_recommendation(rec: Recommendation) -> Dict[str, Any]:
     return data
 
 
-def main() -> None:
-    app = create_app()
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Date & Outing AI Web サーバー")
+    parser.add_argument(
+        "--host",
+        default="0.0.0.0",
+        help="待ち受けるホスト名。ローカルのみで使う場合は 127.0.0.1 を指定できます。",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=8000,
+        help="待ち受けポート番号 (既定: 8000)。使用中の場合は別ポートを指定してください。",
+    )
+    return parser.parse_args()
 
+
+def main() -> None:
+    args = _parse_args()
+    app = create_app()
+    display_host = "127.0.0.1" if args.host in {"0.0.0.0", "::"} else args.host
+    print(
+        f"🚀 デート＆おでかけAI Web が http://{display_host}:{args.port} で利用可能です "
+        "(Ctrl+C で終了)"
+    )
+    app.run(debug=False, host=args.host, port=args.port, use_reloader=False)
 
 
 if __name__ == "__main__":  # pragma: no cover - manual launch helper
