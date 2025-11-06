@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict
-from typing import Any, Dict, List, Optional
 
 from flask import Flask, render_template, request
 
@@ -141,7 +139,7 @@ def _serialize_recommendation(rec: Recommendation) -> Dict[str, Any]:
 
 def main() -> None:
     app = create_app()
-    app.run(debug=False, host="0.0.0.0", port=8000)
+
 
 
 if __name__ == "__main__":  # pragma: no cover - manual launch helper
