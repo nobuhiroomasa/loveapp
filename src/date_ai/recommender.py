@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, Iterable, List, Sequence, Tuple
+from typing import Dict, Iterable, List, Sequence
 
-from .data import BUDGET_LEVELS, EXPERIENCES, Experience
+from .data import EXPERIENCES, Experience
 
 CITY_ALIASES: Dict[str, str] = {
     "tokyo": "東京",
@@ -17,13 +17,7 @@ CITY_ALIASES: Dict[str, str] = {
     "nagoya": "名古屋",
     "naha": "那覇",
     "kobe": "神戸",
-    "sendai": "仙台",
-    "hiroshima": "広島",
-    "kanazawa": "金沢",
 }
-
-
-_BUDGET_INDEX: Dict[str, int] = {value: idx for idx, value in enumerate(BUDGET_LEVELS)}
 
 
 @dataclass
@@ -81,11 +75,9 @@ class DateOutingAI:
                 score += 2.0
                 rationale.append(f"リクエストのエリア（{exp.city}）にマッチ")
 
-            if request.budget:
-                budget_score, budget_reason = _budget_affinity(request.budget, exp.budget)
-                score += budget_score
-                if budget_reason:
-                    rationale.append(budget_reason)
+            if request.budget and request.budget == exp.budget:
+                score += 1.0
+                rationale.append(f"予算帯 {exp.budget} が一致")
 
             if request.weather and request.weather == exp.weather:
                 score += 1.0
@@ -144,26 +136,4 @@ def _canonical_city(value: str | None) -> str:
 
     lookup_key = trimmed.lower()
     return CITY_ALIASES.get(lookup_key, trimmed)
-
-
-def _budget_affinity(requested: str, candidate: str) -> Tuple[float, str | None]:
-    if not requested:
-        return 0.0, None
-
-    if requested == candidate:
-        return 1.0, f"予算帯 {candidate} がぴったり"
-
-    requested_index = _BUDGET_INDEX.get(requested)
-    candidate_index = _BUDGET_INDEX.get(candidate)
-    if requested_index is None or candidate_index is None:
-        return 0.0, None
-
-    gap = abs(requested_index - candidate_index)
-    if gap == 1:
-        nuance = "少し贅沢" if candidate_index > requested_index else "やや節約"
-        return 0.6, f"予算帯が近い (指定: {requested} → プランは{candidate}で{nuance})"
-
-    adjustment = -0.4 if candidate_index > requested_index else -0.2
-    nuance = "大幅に贅沢" if candidate_index > requested_index else "かなり控えめ"
-    return adjustment, f"指定予算({requested})より{nuance}なプランです"
 

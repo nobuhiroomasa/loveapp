@@ -116,10 +116,6 @@
               <p class="meta">
                 スコア: {{ '%.1f' | format(rec.score) }} / 所要時間: 約{{ rec.duration_hours }}時間 / 予算: {{ rec.budget }}
               </p>
-              <p class="meta secondary">
-                ベストシーズン: {{ rec.ideal_season }} / おすすめ時間帯: {{ rec.ideal_time }} /
-                予約: {{ '要予約' if rec.booking_required else '当日参加OK' }}
-              </p>
             </header>
             <p class="description">{{ rec.description }}</p>
             <div class="highlights">
@@ -130,16 +126,6 @@
                 {% endfor %}
               </ul>
             </div>
-            {% if rec.tips %}
-            <div class="tips">
-              <h4>プランのコツ</h4>
-              <ul>
-                {% for tip in rec.tips %}
-                <li>{{ tip }}</li>
-                {% endfor %}
-              </ul>
-            </div>
-            {% endif %}
             <div class="rationale">
               <h4>おすすめの理由</h4>
               <ul>

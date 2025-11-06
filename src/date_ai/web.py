@@ -15,14 +15,13 @@ if importlib.util.find_spec("flask") is None:  # pragma: no cover - import guard
 
 from flask import Flask, render_template, request
 
-from .data import BUDGET_LEVELS, EXPERIENCES
+from .data import EXPERIENCES
 from .recommender import DateOutingAI, Recommendation, RecommendationRequest
 
 
 def _collect_choices() -> Dict[str, List[str]]:
     cities = sorted({exp.city for exp in EXPERIENCES})
-    budget_set = {exp.budget for exp in EXPERIENCES}
-    budgets = [level for level in BUDGET_LEVELS if level in budget_set]
+    budgets = sorted({exp.budget for exp in EXPERIENCES})
     weathers = sorted({exp.weather for exp in EXPERIENCES})
     moods = sorted({exp.mood for exp in EXPERIENCES})
     activity_types = sorted({exp.activity_type for exp in EXPERIENCES})

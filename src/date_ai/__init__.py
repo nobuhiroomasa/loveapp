@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from .data import BUDGET_LEVELS
 from .recommender import DateOutingAI, Recommendation, RecommendationRequest
 
 if TYPE_CHECKING:  # pragma: no cover - import only for typing
@@ -24,5 +23,4 @@ __all__ = [
     "RecommendationRequest",
     "Recommendation",
     "create_app",
-    "BUDGET_LEVELS",
 ]

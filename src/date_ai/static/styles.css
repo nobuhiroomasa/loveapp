@@ -140,25 +140,15 @@ button:hover {
   font-size: 0.9rem;
 }
 
-.card .meta.secondary {
-  margin-top: -0.25rem;
-  font-size: 0.85rem;
-}
-
 .card .description {
   margin: 0;
   line-height: 1.6;
 }
 
 .highlights ul,
-.tips ul,
 .rationale ul {
   margin: 0.5rem 0 0;
   padding-left: 1.25rem;
-}
-
-.tips h4 {
-  margin-bottom: 0.25rem;
 }
 
 .tags {

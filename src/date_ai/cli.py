@@ -7,7 +7,6 @@ import json
 from dataclasses import asdict
 from typing import Any
 
-from .data import BUDGET_LEVELS
 from .recommender import DateOutingAI, RecommendationRequest
 
 
@@ -19,8 +18,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("city", help="出発エリア（例: 東京, 京都）")
     parser.add_argument(
         "--budget",
-        choices=list(BUDGET_LEVELS),
-        help="想定する予算帯 (¥〜¥プレミアム)",
+        choices=["¥", "¥¥", "¥¥¥"],
+        help="想定する予算帯 (¥/¥¥/¥¥¥)",
     )
     parser.add_argument(
         "--weather",
@@ -94,18 +93,9 @@ def main(argv: list[str] | None = None) -> int:
             print(f"   所要時間: 約{exp.duration_hours}時間 / 予算: {exp.budget}")
             print(f"   ムード: {exp.mood} / アクティビティ: {exp.activity_type}")
             print(f"   概要: {exp.description}")
-            print(
-                f"   ベストシーズン: {exp.ideal_season} / おすすめ時間帯: {exp.ideal_time}"
-            )
-            booking = "要予約" if exp.booking_required else "当日参加OK"
-            print(f"   予約: {booking}")
             print("   ハイライト:")
             for highlight in exp.highlights:
                 print(f"    - {highlight}")
-            if exp.tips:
-                print("   プランのコツ:")
-                for tip in exp.tips:
-                    print(f"    - {tip}")
             print("   推薦ポイント:")
             for reason in rec.rationale:
                 print(f"    * {reason}")
