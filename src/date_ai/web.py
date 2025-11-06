@@ -2,15 +2,6 @@
 
 from __future__ import annotations
 
-import importlib.util
-from dataclasses import asdict
-from typing import Any, Dict, List, Optional
-
-if importlib.util.find_spec("flask") is None:  # pragma: no cover - import guard
-    raise RuntimeError(
-        "Flask が見つかりません。`pip install -r requirements.txt` を実行して依存関係を"
-        "インストールしてください。"
-    )
 
 from flask import Flask, render_template, request
 
@@ -148,10 +139,7 @@ def _serialize_recommendation(rec: Recommendation) -> Dict[str, Any]:
 
 def main() -> None:
     app = create_app()
-    host = "0.0.0.0"
-    port = 8000
-    print(f"🚀 デート＆おでかけAI Web が http://127.0.0.1:{port} で利用可能です (Ctrl+C で終了)")
-    app.run(debug=False, host=host, port=port)
+
 
 
 if __name__ == "__main__":  # pragma: no cover - manual launch helper
