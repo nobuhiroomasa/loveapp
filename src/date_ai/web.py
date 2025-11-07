@@ -15,19 +15,24 @@ if importlib.util.find_spec("flask") is None:  # pragma: no cover - import guard
 
 from flask import Flask, render_template, request
 
-from .data import EXPERIENCES
+from .data import BUDGET_BANDS, BUDGET_LEVELS, EXPERIENCES, BudgetBand
 from .recommender import DateOutingAI, Recommendation, RecommendationRequest
 
 
-def _collect_choices() -> Dict[str, List[str]]:
+_BUDGET_LOOKUP: Dict[str, BudgetBand] = {band.code: band for band in BUDGET_BANDS}
+
+
+def _collect_choices() -> Dict[str, Any]:
     cities = sorted({exp.city for exp in EXPERIENCES})
-    budgets = sorted({exp.budget for exp in EXPERIENCES})
+    budget_set = {exp.budget for exp in EXPERIENCES}
+    budgets = [level for level in BUDGET_LEVELS if level in budget_set]
     weathers = sorted({exp.weather for exp in EXPERIENCES})
     moods = sorted({exp.mood for exp in EXPERIENCES})
     activity_types = sorted({exp.activity_type for exp in EXPERIENCES})
     return {
         "cities": cities,
         "budgets": budgets,
+        "budget_bands": BUDGET_BANDS,
         "weathers": weathers,
         "moods": moods,
         "activity_types": activity_types,
@@ -137,14 +142,31 @@ def _parse_form(mapping: Any) -> Dict[str, Any]:
 
 
 def _serialize_recommendation(rec: Recommendation) -> Dict[str, Any]:
-    data = asdict(rec.experience)
-    data.update(
+    exp_dict = asdict(rec.experience)
+    detail = exp_dict.get("detail")
+    if isinstance(detail, dict):
+        exp_dict["detail"] = {
+            key: value
+            for key, value in detail.items()
+            if (value or value == 0) and (not isinstance(value, list) or value)
+        }
+
+    band = _BUDGET_LOOKUP.get(rec.experience.budget)
+    if band:
+        exp_dict["budget_band"] = {
+            "code": band.code,
+            "label": band.label,
+            "range": band.format_range(),
+            "description": band.description,
+        }
+
+    exp_dict.update(
         {
             "score": rec.score,
             "rationale": list(rec.rationale),
         }
     )
-    return data
+    return exp_dict
 
 
 def _parse_args() -> argparse.Namespace:

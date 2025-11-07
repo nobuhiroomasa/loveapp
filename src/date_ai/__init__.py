@@ -4,6 +4,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from .data import (
+    BUDGET_BANDS,
+    BUDGET_LEVELS,
+    BudgetBand,
+    Experience,
+    ExperienceDetail,
+)
 from .recommender import DateOutingAI, Recommendation, RecommendationRequest
 
 if TYPE_CHECKING:  # pragma: no cover - import only for typing
@@ -23,4 +30,9 @@ __all__ = [
     "RecommendationRequest",
     "Recommendation",
     "create_app",
+    "Experience",
+    "ExperienceDetail",
+    "BudgetBand",
+    "BUDGET_LEVELS",
+    "BUDGET_BANDS",
 ]
