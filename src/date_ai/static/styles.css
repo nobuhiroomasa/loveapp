@@ -1,0 +1,273 @@
+:root {
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  color: #1f2933;
+  background-color: #f7fafc;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header,
+footer {
+  background: linear-gradient(120deg, #ff8ba7, #ffc6c7);
+  color: #fff;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+header .lead {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+main {
+  flex: 1;
+  padding: 2rem 1.5rem 4rem;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+section + section {
+  margin-top: 2.5rem;
+}
+
+.search form {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 12px 32px rgba(255, 139, 167, 0.15);
+}
+
+.budget-guide {
+  margin-top: 1.5rem;
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+.budget-guide h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1.05rem;
+}
+
+.budget-guide ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.budget-guide li {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 0.75rem;
+  align-items: center;
+  background-color: #fff7fa;
+  border-radius: 12px;
+  padding: 0.75rem;
+}
+
+.budget-guide .code {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffe5ec;
+  color: #b8325a;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+}
+
+.budget-guide p {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+select,
+input,
+button {
+  font: inherit;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background-color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+select:focus,
+input:focus {
+  border-color: #ff8ba7;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 139, 167, 0.25);
+}
+
+.actions {
+  text-align: right;
+  margin-top: 1rem;
+}
+
+button {
+  background: linear-gradient(120deg, #ff8ba7, #ff758f);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.required {
+  color: #ff4d6d;
+  margin-left: 0.25rem;
+}
+
+.message {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: #fff4f6;
+  border-left: 4px solid #ff8ba7;
+  border-radius: 10px;
+}
+
+.results h2 {
+  margin-bottom: 1rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+  background-color: #fff7fa;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+}
+
+.detail-grid div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.detail-grid strong {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #b8325a;
+}
+
+.detail-grid a {
+  color: #b8325a;
+  text-decoration: none;
+}
+
+.detail-grid a:hover {
+  text-decoration: underline;
+}
+
+.card .meta {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.card .meta.secondary {
+  margin-top: -0.25rem;
+  font-size: 0.85rem;
+}
+
+.card .description {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.highlights ul,
+.tips ul,
+.rationale ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.tips h4 {
+  margin-bottom: 0.25rem;
+}
+
+.tags {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tags span {
+  background-color: #ffe5ec;
+  color: #b8325a;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+footer small {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+  header,
+  footer {
+    padding: 1.5rem 1rem;
+  }
+
+  main {
+    padding: 1.5rem 1rem 3rem;
+  }
+}

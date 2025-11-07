@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>デート＆おでかけAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <header>
+      <h1>デート＆おでかけAI</h1>
+      <p class="lead">
+        気分や条件を入力すると、ぴったりのおでかけプランをおすすめします。
+      </p>
+    </header>
+
+    <main>
+      <section class="search">
+        <form method="post">
+          <div class="field">
+            <label for="city">エリア<span class="required">*</span></label>
+            <select id="city" name="city" required>
+              <option value="">選択してください</option>
+              {% for city in choices.cities %}
+              <option value="{{ city }}" {% if form.city == city %}selected{% endif %}>{{ city }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="budget">予算帯</label>
+              <select id="budget" name="budget">
+                <option value="">指定なし</option>
+                {% for band in choices.budget_bands %}
+                  {% if band.code in choices.budgets %}
+                    <option value="{{ band.code }}" {% if form.budget == band.code %}selected{% endif %}>
+                      {{ band.code }} - {{ band.label }}
+                    </option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="weather">想定天気</label>
+              <select id="weather" name="weather">
+                <option value="">指定なし</option>
+                {% for weather in choices.weathers %}
+                <option value="{{ weather }}" {% if form.weather == weather %}selected{% endif %}>{{ weather }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="mood">ムード</label>
+              <select id="mood" name="mood">
+                <option value="">指定なし</option>
+                {% for mood in choices.moods %}
+                <option value="{{ mood }}" {% if form.mood == mood %}selected{% endif %}>{{ mood }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="activity">アクティビティ</label>
+              <select id="activity" name="activity_type">
+                <option value="">指定なし</option>
+                {% for activity in choices.activity_types %}
+                <option value="{{ activity }}" {% if form.activity_type == activity %}selected{% endif %}>{{ activity }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="max_duration_hours">最大時間 (時間)</label>
+              <input
+                type="number"
+                id="max_duration_hours"
+                name="max_duration_hours"
+                min="1"
+                max="24"
+                value="{{ form.max_duration_hours if form.max_duration_hours is not none else '' }}"
+              />
+            </div>
+            <div class="field">
+              <label for="limit">表示件数</label>
+              <input
+                type="number"
+                id="limit"
+                name="limit"
+                min="1"
+                max="10"
+                value="{{ form.limit }}"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button type="submit">おすすめを表示</button>
+          </div>
+        </form>
+
+        <aside class="budget-guide">
+          <h3>予算帯の目安</h3>
+          <ul>
+            {% for band in choices.budget_bands %}
+            <li>
+              <span class="code">{{ band.code }}</span>
+              <div>
+                <strong>{{ band.label }}</strong>
+                <p>{{ band.description }} / 目安: {{ band.format_range() }}</p>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </aside>
+
+        {% if message %}
+        <p class="message">{{ message }}</p>
+        {% endif %}
+      </section>
+
+      <section class="results">
+        {% if recommendations %}
+        <h2>おすすめプラン</h2>
+        <div class="cards">
+          {% for rec in recommendations %}
+          <article class="card">
+            <header>
+              <h3>{{ rec.title }} <span class="city">({{ rec.city }})</span></h3>
+              <p class="meta">
+                スコア: {{ '%.1f' | format(rec.score) }} / 所要時間: 約{{ rec.duration_hours }}時間 /
+                予算: {{ rec.budget }}
+              </p>
+              {% if rec.budget_band %}
+              <p class="meta secondary">
+                {{ rec.budget_band.label }} ({{ rec.budget_band.range }}) - {{ rec.budget_band.description }}
+              </p>
+              {% endif %}
+              <p class="meta secondary">
+                ベストシーズン: {{ rec.ideal_season }} / おすすめ時間帯: {{ rec.ideal_time }} /
+                予約: {{ '要予約' if rec.booking_required else '当日参加OK' }}
+              </p>
+            </header>
+            <p class="description">{{ rec.description }}</p>
+            {% if rec.detail %}
+            <div class="detail-grid">
+              {% if rec.detail.neighborhood %}
+              <div><strong>エリア</strong><span>{{ rec.detail.neighborhood }}</span></div>
+              {% endif %}
+              {% if rec.detail.meeting_point %}
+              <div><strong>集合場所</strong><span>{{ rec.detail.meeting_point }}</span></div>
+              {% endif %}
+              {% if rec.detail.access %}
+              <div><strong>アクセス</strong><span>{{ rec.detail.access }}</span></div>
+              {% endif %}
+              {% if rec.detail.attire %}
+              <div><strong>服装メモ</strong><span>{{ rec.detail.attire }}</span></div>
+              {% endif %}
+              {% if rec.detail.languages %}
+              <div><strong>対応言語</strong><span>{{ rec.detail.languages | join(', ') }}</span></div>
+              {% endif %}
+              {% if rec.detail.suitable_for %}
+              <div><strong>おすすめシーン</strong><span>{{ rec.detail.suitable_for | join(', ') }}</span></div>
+              {% endif %}
+              {% if rec.detail.cancellation %}
+              <div><strong>キャンセル</strong><span>{{ rec.detail.cancellation }}</span></div>
+              {% endif %}
+              {% if rec.detail.website %}
+              <div><strong>公式情報</strong><span><a href="{{ rec.detail.website }}" target="_blank" rel="noopener">Webサイト</a></span></div>
+              {% endif %}
+              {% if rec.detail.contact %}
+              <div><strong>問い合わせ</strong><span>{{ rec.detail.contact }}</span></div>
+              {% endif %}
+            </div>
+            {% endif %}
+            <div class="highlights">
+              <h4>ハイライト</h4>
+              <ul>
+                {% for highlight in rec.highlights %}
+                <li>{{ highlight }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% if rec.tips %}
+            <div class="tips">
+              <h4>プランのコツ</h4>
+              <ul>
+                {% for tip in rec.tips %}
+                <li>{{ tip }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+            <div class="rationale">
+              <h4>おすすめの理由</h4>
+              <ul>
+                {% for reason in rec.rationale %}
+                <li>{{ reason }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+            <footer class="tags">
+              <span>#{{ rec.mood }}</span>
+              <span>#{{ rec.activity_type }}</span>
+              <span>#{{ rec.weather }}</span>
+              {% if rec.budget_band %}
+              <span>#{{ rec.budget_band.code }}</span>
+              {% endif %}
+            </footer>
+          </article>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </section>
+    </main>
+
+    <footer>
+      <small>Powered by Date &amp; Outing AI</small>
+    </footer>
+  </body>
+</html>
